@@ -1,10 +1,19 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { Box, Button, TextField, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginPage() {
   const authContext = useContext(AuthContext);
-  console.log(authContext);
+  const [auth, setAuth] = useState<null | boolean>(authContext);
+  const navigate = useNavigate();
+  const [loginValue, setLoginValue] = useState("");
+  const [passwordValue, setPasswordValue] = useState("");
+
+  if (auth) {
+    navigate("/");
+  }
+
   return (
     <Box
       display={"flex"}
@@ -26,6 +35,8 @@ export default function LoginPage() {
           },
           "& .MuiInputLabel-root.Mui-focused": { color: "white" },
         }}
+        value={loginValue}
+        onChange={(e) => setLoginValue(e.target.value)}
       />
       <TextField
         label="Пароль"
@@ -38,7 +49,8 @@ export default function LoginPage() {
           },
           "& .MuiInputLabel-root.Mui-focused": { color: "white" },
         }}
-        color="info"
+        value={passwordValue}
+        onChange={(e) => setPasswordValue(e.target.value)}
       />
       <Button
         variant="contained"
@@ -48,6 +60,11 @@ export default function LoginPage() {
           "&:hover": {
             backgroundColor: "#0a0a0a",
           },
+        }}
+        onClick={() => {
+          if (loginValue === "admin" && passwordValue === "admin") {
+            setAuth(true);
+          }
         }}
       >
         Войти
