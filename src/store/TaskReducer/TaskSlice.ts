@@ -1,11 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-
-interface Task {
-  id: number;
-  name: string;
-  isDone: boolean;
-  isDelete: boolean;
-}
+import { Task } from "../../interface";
 
 const initialState: Task[] = [];
 

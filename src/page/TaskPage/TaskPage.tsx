@@ -1,13 +1,39 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { Box, Button, Tab, Tabs, TextField } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { addTask } from "../../store/TaskReducer/TaskSlice";
+import { Task } from "../../interface";
+import { RootState } from "../../store/store";
 
 export default function TaskPage() {
   const authContext = useContext(AuthContext);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const taskList = useSelector((state: RootState) => state.task);
+  console.log(taskList);
+  const [taskTitle, setTaskTitle] = useState("");
+
   if (!authContext) {
     navigate("/login");
+  }
+
+  function handleAddTask() {
+    if (taskTitle.trim()) {
+      const newTask = {
+        id: Date.now().toString(),
+        name: taskTitle,
+        isDone: false,
+        isDelete: false,
+      };
+      dispatch(addTask(newTask));
+      setTaskTitle("");
+    }
+  }
+
+  function handleClearAllTask() {
+    dispatch(addTask([]));
   }
 
   return (
@@ -20,7 +46,9 @@ export default function TaskPage() {
         sx={{ backgroundColor: "gray", borderRadius: "8px", height: "40px" }}
         alignItems={"center"}
       >
-        <Button variant="contained">+ Добавить</Button>
+        <Button variant="contained" onClick={handleAddTask}>
+          + Добавить
+        </Button>
         <TextField
           label="Название задачи"
           sx={{
@@ -31,8 +59,10 @@ export default function TaskPage() {
             },
             "& .MuiInputLabel-root.Mui-focused": { color: "white" },
           }}
+          value={taskTitle}
+          onChange={(e) => setTaskTitle(e.target.value)}
         ></TextField>
-        <Button color="error" variant="contained">
+        <Button color="error" variant="contained" onClick={handleClearAllTask}>
           Очистисть
         </Button>
       </Box>
@@ -45,11 +75,14 @@ export default function TaskPage() {
         alignItems={"center"}
       >
         <Tabs>
-          <Tab label="Текущие дела" />
-          <Tab label="Все дела" />
-          <Tab label="Выполненные дела" />
-          <Tab label="Корзина" />
+          <Tab value="1" label="Текущие дела" />
+          <Tab value="2" label="Все дела" />
+          <Tab value="3" label="Выполненные дела" />
+          <Tab value="4" label="Корзина" />
         </Tabs>
+        {taskList.map((task: Task) => (
+          <p>{task.name}</p>
+        ))}
       </Box>
     </Box>
   );
