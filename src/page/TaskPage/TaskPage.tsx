@@ -12,14 +12,15 @@ import {
 import { Task } from "../../interface";
 import { RootState } from "../../store/store";
 import TaskItem from "../../components/TaskItem";
+import { TaskStatus } from "../../interface";
 
 export default function TaskPage() {
   const authContext = useContext(AuthContext);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const taskList = useSelector((state: RootState) => state.task);
-  console.log(taskList);
   const [taskTitle, setTaskTitle] = useState("");
+  const [currentTab, setCurrentTab] = useState<TaskStatus>(TaskStatus.ALL);
 
   if (!authContext) {
     navigate("/login");
@@ -49,6 +50,19 @@ export default function TaskPage() {
   function handleCompleteTask(id: string) {
     dispatch(completeTask(id));
   }
+
+  const filteredData = taskList.filter((task: Task) => {
+    switch (currentTab) {
+      case TaskStatus.ACTIVE:
+        return !task.isDelete && !task.isDone;
+      case TaskStatus.COMPLETED:
+        return task.isDone;
+      case TaskStatus.DELETED:
+        return task.isDelete;
+      default:
+        return true;
+    }
+  });
 
   return (
     <Box display={"flex"} flexDirection={"column"} gap={2}>
@@ -89,14 +103,28 @@ export default function TaskPage() {
         sx={{ backgroundColor: "gray", borderRadius: "8px" }}
         alignItems={"center"}
       >
-        <Tabs>
-          <Tab value="1" label="Текущие дела" />
-          <Tab value="2" label="Все дела" />
-          <Tab value="3" label="Выполненные дела" />
-          <Tab value="4" label="Корзина" />
+        <Tabs
+          value={currentTab}
+          onChange={(__, value) => setCurrentTab(value)}
+          sx={{
+            "& .MuiTab-root": {
+              color: "white",
+            },
+            "& .Mui-selected": {
+              color: "black",
+            },
+            "& .MuiTabs-indicator": {
+              backgroundColor: "black",
+            },
+          }}
+        >
+          <Tab value={TaskStatus.ACTIVE} label="Текущие дела" />
+          <Tab value={TaskStatus.ALL} label="Все дела" />
+          <Tab value={TaskStatus.COMPLETED} label="Выполненные дела" />
+          <Tab value={TaskStatus.DELETED} label="Корзина" />
         </Tabs>
         <Box display={"flex"} flexDirection={"column"} gap={2}>
-          {taskList.map((task: Task) => (
+          {filteredData.map((task: Task) => (
             <TaskItem
               name={task.name}
               isDone={task.isDone}

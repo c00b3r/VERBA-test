@@ -4,3 +4,10 @@ export interface Task {
   isDone: boolean;
   isDelete: boolean;
 }
+
+export enum TaskStatus {
+  ALL = "all",
+  ACTIVE = "active",
+  COMPLETED = "completed",
+  DELETED = "deleted",
+}

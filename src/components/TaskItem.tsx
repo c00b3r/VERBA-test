@@ -24,7 +24,11 @@ export default function TaskItem({
       width={"500px"}
       alignItems={"center"}
     >
-      <Checkbox value={isDone} onChange={() => onDone(id)}></Checkbox>
+      <Checkbox
+        value={isDone}
+        onChange={() => onDone(id)}
+        checked={isDone}
+      ></Checkbox>
       <Typography
         variant="h5"
         sx={{
