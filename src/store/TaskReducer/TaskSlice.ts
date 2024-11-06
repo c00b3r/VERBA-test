@@ -17,7 +17,7 @@ const TaskSlice = createSlice({
     deleteTask: (state, action) => {
       const updatedTasks = state.map((task) => {
         if (task.id === action.payload) {
-          return { ...task, isDelete: true };
+          return { ...task, isDelete: true, isDone: false };
         }
         return task;
       });

@@ -4,7 +4,7 @@ import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import TaskPage from "./page/TaskPage/TaskPage.tsx";
 import LoginPage from "./page/LoginPage/LoginPage.tsx";
-import { AuthContext } from "./context/AuthContext.tsx";
+import { AuthProvider } from "./context/AuthContext.tsx";
 import { Provider } from "react-redux";
 import store from "./store/store.ts";
 
@@ -21,10 +21,10 @@ const route = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <Provider store={store}>
-      <AuthContext.Provider value={true}>
+    <AuthProvider>
+      <Provider store={store}>
         <RouterProvider router={route} />
-      </AuthContext.Provider>
-    </Provider>
+      </Provider>
+    </AuthProvider>
   </StrictMode>
 );

@@ -5,10 +5,15 @@ import { useNavigate } from "react-router-dom";
 
 export default function LoginPage() {
   const authContext = useContext(AuthContext);
-  const [auth, setAuth] = useState<null | boolean>(authContext);
   const navigate = useNavigate();
   const [loginValue, setLoginValue] = useState("");
   const [passwordValue, setPasswordValue] = useState("");
+
+  if (!authContext) {
+    return null;
+  }
+
+  const { auth, setAuth } = authContext;
 
   if (auth) {
     navigate("/");
