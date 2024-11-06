@@ -19,7 +19,7 @@ const route = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <AuthContext.Provider value={null}>
+    <AuthContext.Provider value={true}>
       <RouterProvider router={route} />
     </AuthContext.Provider>
   </StrictMode>
