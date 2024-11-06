@@ -5,6 +5,7 @@ import { Box, Button, Tab, Tabs, TextField } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addTask,
+  clearAllTasks,
   completeTask,
   deleteTask,
 } from "../../store/TaskReducer/TaskSlice";
@@ -38,7 +39,7 @@ export default function TaskPage() {
   }
 
   function handleClearAllTask() {
-    dispatch(addTask([]));
+    dispatch(clearAllTasks());
   }
 
   function handleDeleteTask(id: string) {
